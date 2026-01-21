@@ -7,8 +7,14 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # ---------- Run stage ----------
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:17-jdk-alpine
+
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+
+COPY . .
+
+RUN ./mvnw clean package -DskipTests
+
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+
+CMD ["java", "-jar", "target/beach-backend-1.0.0.jar"]
